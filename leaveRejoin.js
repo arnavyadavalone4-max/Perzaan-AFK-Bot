@@ -80,6 +80,24 @@ function setupLeaveRejoin(bot, createBot) {
         cleanup()
         stopped = false
 
+        // --- NEW: CHAT LOGIN/REGISTER SYSTEM ---
+        bot.on('message', (jsonMsg) => {
+            const message = jsonMsg.toString();
+            
+            // If the server asks to register (Change MySecurePass123 to your choice!)
+            if (message.includes('/register')) {
+                bot.chat('/register MySecurePass123 MySecurePass123');
+                console.log("[Bot] Sent register command!");
+            }
+            
+            // If the server asks to login
+            if (message.includes('/login')) {
+                bot.chat('/login MySecurePass123');
+                console.log("[Bot] Sent login command!");
+            }
+        });
+        // ----------------------------------------
+
         // Stay connected: 2 minutes -> 15 minutes (More realistic AFK behavior)
         // Stay connected 1-5 minutes before a scheduled leave/rejoin cycle.
         const stayTime = randomMs(60000, 300000)
